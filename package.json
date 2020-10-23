@@ -1,0 +1,32 @@
+{
+  "name": "substrate",
+  "version": "5.0.0",
+  "type": "module",
+  "private": true,
+  "description": "literate programming with javascript, markdown, and explorables",
+  "main": "build.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mreinstein/substrate.git"
+  },
+  "keywords": [],
+  "author": "Mike Reinstein",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mreinstein/substrate/issues"
+  },
+  "homepage": "https://github.com/mreinstein/substrate#readme",
+  "dependencies": {
+    "autoprefixer": "^10.0.1",
+    "espree": "^7.3.0",
+    "koa": "^2.13.0",
+    "koa-static": "^5.0.0",
+    "marked": "^1.2.2",
+    "micro": "^9.3.4",
+    "postcss": "^8.1.2",
+    "serve-handler": "^6.1.3"
+  }
+}
