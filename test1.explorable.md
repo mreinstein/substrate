@@ -18,9 +18,6 @@ const model = {
     b: Math.random()
 }
 
-function randomInt (max) {
-    return Math.round(Math.random() * max)
-}
 ```
 
 
@@ -64,6 +61,7 @@ import constraintSolver from 'https://cdn.skypack.dev/constraint-solver@^3.0.1'
 You can import other explorables too
 ```javascript
 import randomInt from './test2.explorable.md'
+import html     from 'https://cdn.jsdelivr.net/npm/snabby@2/snabby.js'
 ```
 
 
