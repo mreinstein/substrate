@@ -5,7 +5,6 @@ literate programming with javascript, markdown, and explorables
 
 ## TODO
 
-* render the available explorables directory in a nav drawer
 * importing a non-existent explorable crashes server.js
 * importing an explorable with no default export throws a console error within editor.html
 * generate table of contents from markdown header sections  http://play.witheve.com/#/examples/quickstart.eve

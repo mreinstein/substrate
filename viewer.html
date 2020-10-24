@@ -9,14 +9,26 @@
     <style>
         body {
             margin: 0;
-            background-color: #313638;
             color: white;
             font-family: monospace;
-
             text-rendering: optimizeLegibility;
             overscroll-behavior: none;
             touch-action: none;
         }
+
+        header {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 48px;
+            background-color: rgba(255,255,255,0.8);
+            display: flex;
+            align-items: center;
+            padding: 6px;
+            box-sizing: border-box;
+        }
+
 
         .outer-container {
             display: grid;
@@ -25,6 +37,7 @@
             grid-template-areas: "preview";
             grid-gap: 0px;
 
+            margin-top: 30px;
             position: absolute;
             top: 0px;
             left: 0px;
@@ -44,6 +57,18 @@
             border: none;
         }
 
+        button.hamburger {
+            color: black;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        ul.explorables {
+            padding-inline-start: 20px;
+        }
+
     </style>
 
 </head>
@@ -55,42 +80,100 @@
     </div>
 </div>
 
+<main></main>
+
 
 <script type="module">
-import build from '/build-html.js'
+import build  from '/build-html.js'
+import drawer from 'https://cdn.jsdelivr.net/gh/mreinstein/snabbdom-drawer/drawer.js'
+import html   from 'https://cdn.jsdelivr.net/npm/snabby@2/snabby.js'
+
+
+const model = {
+    currentVnode: document.querySelector('main'),
+    drawer: drawer.init({ open: false }),
+    explorables: { },
+    lastModified: undefined,
+    sourceUrl: '__SOURCE__'
+}
+
+function toggleDrawer (model, update) {
+    model.drawer.open = !model.drawer.open;
+    update()
+}
+
+
+function view (model, update) {
+    const contentView = html`
+        <div>
+            <h3>Explorables</h3>
+            <ul class="explorables">
+                ${Object.keys(model.explorables)
+                        .map((e) => '/' + e.replace('.explorable.md', ''))
+                        .map((e) => html`<li><a href="${e}">${e}</a></li>`)}
+            </ul>
+        </div>`
+
+    return html`<main>
+        <header>
+            <button class="hamburger" @on:click=${() => toggleDrawer(model, update)}>☰</button>
+        </header>
+        ${drawer.view(model, contentView, update)}
+    </main>`
+}
+
+
+function update () {
+    const newVnode = view(model, update)
+    model.currentVnode = html.update(model.currentVnode, newVnode)
+}
+
+
+async function getList () {
+    const response = await fetch('/poll/status')
+    return response.json()
+}
+
+
+async function buildSource (sourceUrl) {
+    const response = await fetch(sourceUrl)
+    const source = await response.text()
+    const htmlOutput = build(source)
+    return htmlOutput
+}
 
 
 async function main() {
-
-    const sourceUrl = '__SOURCE__'
-    const response = await fetch(sourceUrl)
-    const source = await response.text()
-
     const iframe = document.querySelector('iframe')
-    const htmlOutput = build(source)
 
-    let lastModified
+    const data = await Promise.all([
+        getList(),
+        buildSource(model.sourceUrl)
+    ])
 
+    model.explorables = data[0]
+    const htmlOutput = data[1]
     iframe.srcdoc = htmlOutput
+    update()
 
     // poll the server for changes to current file and reload when it changes
     setInterval(async function () {
-        const response = await fetch('/poll/status')
-        const newList = await response.json()
+        model.explorables = await getList()
 
-        const entry = newList[sourceUrl.slice(1)]
+        const entry = model.explorables[model.sourceUrl.slice(1)]
 
-        if (!lastModified) {
-            lastModified = entry
-        } else if (entry !== lastModified) {
-            lastModified = entry
+        if (!model.lastModified) {
+            model.lastModified = entry
+            update()
+        } else if (entry !== model.lastModified) {
+            model.lastModified = entry
 
-            const response = await fetch(sourceUrl)
-            const source = await response.text()
-            const htmlOutput = build(source)
+            const htmlOutput = await buildSource(model.sourceUrl)
             iframe.srcdoc = htmlOutput
+            update()
         }
     }, 2000)
+
 }
 
 

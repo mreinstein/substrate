@@ -6,7 +6,7 @@ function bannerView () {
 }
 ```
 
-Standard markup text is possible **here!**
+Standard markup text is possible **here**
 
 
 This part demonstrates an explorable code block that has general purpose stuff in it (doesn't return a view):
