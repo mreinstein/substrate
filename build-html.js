@@ -17,7 +17,6 @@ function endsWithSnabbyBlock (program) {
 
 
 export default function build (src) {
-
     let explorableViewCount = 0
     let explorableViewIdx = 0
     

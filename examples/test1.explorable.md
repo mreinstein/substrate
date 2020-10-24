@@ -6,7 +6,7 @@ function bannerView () {
 }
 ```
 
-Standard markup text **here!**
+Standard markup text is possible **here!**
 
 
 This part demonstrates an explorable code block that has general purpose stuff in it (doesn't return a view):
@@ -26,7 +26,7 @@ When an explorable ends with an `html` call, we give this explorable a view in t
 ```javascript explorable
 function clicky () {
     model.counter++
-    model.derps.push(randomInt(99))
+    model.derps.push(randomInt(1, 99))
     update()
 }
 

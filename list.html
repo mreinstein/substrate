@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Substrate</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+    <script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/javascript.min.js"></script>
+
+    <style>
+        * {
+            font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+            text-rendering: optimizeLegibility;
+        }
+
+        body {
+            margin: 40px;
+            background-color: white;
+            overscroll-behavior: none;
+            touch-action: none;
+        }
+
+        .outer-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+            grid-template-areas: "preview";
+            grid-gap: 0px;
+
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .preview-pane {
+            grid-area: preview;
+            padding: 10px;
+            background-color: white;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        ul {
+            padding-inline-start: 20px;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<h1>Available Modules</h1>
+<ul>
+
+</ul>
+
+
+<script type="module">
+
+const ul = document.querySelector('ul')
+let list
+
+
+async function fetchList () {
+    const response = await fetch('/poll/status')
+    const newList = await response.json()
+
+    if (JSON.stringify(newList) !== JSON.stringify(list)) {
+        list = newList
+        ul.innerHTML = ''
+        for (const path in list) {
+            const nicer = path.replace('.explorable.md', '')
+            const li = document.createElement('li')
+            li.innerHTML = `<a href="${nicer}">${nicer}</a>`
+            ul.appendChild(li)
+        }
+    }
+}
+
+
+async function main() {
+    await fetchList()
+    
+    // poll the server for changes to current file and reload when it changes
+    setInterval(fetchList, 2000)
+}
+
+
+main()
+
+</script>
+
+</body>
+</html>
