@@ -11,21 +11,13 @@ import postcss              from 'postcss'
 import serve                from 'koa-static'
 import Koa                  from 'koa'
 import { fileURLToPath }    from 'url'
-import commandLineArgs  from 'command-line-args'
-
-// example for named cli: node server -p C:\codebase\youre-repo -t
-const cmdOptions = [
-    { name: 'ServePath', alias: 'p', type: String },
-    { name: 'TranslateNpmToUrl', alias: 't', type: Boolean }
-];
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 console.log('\n')
 
-const args = commandLineArgs(cmdOptions)
-const initialPath = args.ServePath || ''
-const translateNpmToUrl = args.TranslateNpmToUrl || false
+const args = process.argv.slice(2)
+const initialPath = args.shift() || ''
 
 const servePath = resolve(initialPath)
 
@@ -137,7 +129,7 @@ app.use(async (ctx, next) => {
             // the requester wants javascript  (imported as module)
             const s = fs.readFileSync(targetPath, 'utf8')
             ctx.response.type = 'text/javascript'
-            ctx.response.body = buildModule({source: s, translateNpmToUrl: translateNpmToUrl})
+            ctx.response.body = buildModule({source: s, translateNpmToUrl: true})
 
         } else {
             // the requeser wants the raw explorable
