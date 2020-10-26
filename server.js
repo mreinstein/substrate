@@ -137,7 +137,7 @@ app.use(async (ctx, next) => {
             // the requester wants javascript  (imported as module)
             const s = fs.readFileSync(targetPath, 'utf8')
             ctx.response.type = 'text/javascript'
-            ctx.response.body = buildModule(s, translateNpmToUrl)
+            ctx.response.body = buildModule({source: s, translateNpmToUrl: translateNpmToUrl})
 
         } else {
             // the requeser wants the raw explorable
