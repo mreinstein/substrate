@@ -2,7 +2,7 @@
 
 import autoprefixer         from 'autoprefixer'
 //import buildHtml            from './build-html.js'
-import buildModule          from './build-module.js'
+import buildModule          from 'substrate-build'
 import chalk                from 'chalk'
 import chokidar             from 'chokidar'
 import fs                   from 'fs'

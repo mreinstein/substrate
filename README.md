@@ -12,5 +12,4 @@ literate programming with javascript, markdown, and explorables
 * could we preserve approximate scroll position on reload?
   - some kind of detection in the editor and `scrollTo` that when the reload is complete?
 * provide a way to specify javascript blocks as collapsed by default 
-* move the rollup plugin to it's own repo
 * enable build string replacement (e.g., `__MODULES_SUPPORTED__`)
