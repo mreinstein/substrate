@@ -16,7 +16,7 @@ function endsWithSnabbyBlock (program) {
 }
 
 
-export default function build (src) {
+export default function build ({ source, translateNpmToUrl }) {
     let explorableViewCount = 0
     let explorableViewIdx = 0
     
@@ -60,6 +60,9 @@ export default function build (src) {
         }
     `
 
+    const npmUrl = 'https://cdn.skypack.dev/'
+    const npmModuleRegx = RegExp('(^\/)|(^\.\/)|(^\..\/)|(^http)') /** find imports that do not begin with  "/", "./", or "../"   */
+
 
     const walkTokens = (token) => {
         if (token.type === 'code') {
@@ -70,7 +73,24 @@ export default function build (src) {
                 return
             
             try {
-                const program = espree.parse(token.text, { ecmaVersion: 9, sourceType: 'module' })               
+                const program = espree.parse(token.text, { ecmaVersion: 9, sourceType: 'module' })
+
+                if (translateNpmToUrl) { 
+                    // find node imports and replace with url for cdn
+                    // work from the bottom up to avoid positional index math due to changing the length of the string
+                    Object.keys(program.body).reverse().forEach((idx) => {
+                        const elem = program.body[idx]
+                        
+                        if (elem.type === 'ImportDeclaration' && !npmModuleRegx.test(elem.source.value)) {
+                            const val = `${npmUrl}${elem.source.value}`;
+                            elem.source.value = val
+                            elem.source.raw = "\'" + val +"\'"
+                            token.text = token.text.slice(0,elem.source.start) + `'${val}'` + token.text.slice(elem.source.end, token.text.length)
+                        }
+                    });
+                }
+
+
                 const isExplorable =(langParts[1] === 'explorable')
 
                 if (isExplorable && endsWithSnabbyBlock(program)) {
@@ -136,7 +156,7 @@ export default function build (src) {
 
     marked.use({ walkTokens, renderer })
 
-    const html = marked(src)
+    const html = marked(source)
 
     scriptContent += `\nupdate()\n`
 
