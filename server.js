@@ -71,8 +71,8 @@ function cacheUpdate (url, t, content) {
 
 
 async function processCss (url) {
-    //const css = fs.createReadStream(__dirname + url)
-    const css = fs.readFileSync(__dirname + url, 'utf8')
+    //const css = fs.createReadStream(servePath + url)
+    const css = fs.readFileSync(servePath + url, 'utf8')
     const result = await postcss([ autoprefixer ]).process(css)
     result.warnings().forEach(warn => { console.warn(warn.toString()) })
 
@@ -81,7 +81,7 @@ async function processCss (url) {
 
 
 async function getCss (url) {
-    const s = fs.statSync(__dirname + url)
+    const s = fs.statSync(servePath + url)
     const t = s.mtimeMs
 
     // cache the css and only update when file modification time changes
@@ -128,9 +128,9 @@ app.use(async (ctx, next) => {
 
         if (ctx.request.header['sec-fetch-dest'] === 'script') {
             // the requester wants javascript  (imported as module)
-            const s = fs.readFileSync(targetPath, 'utf8')
+            const source = fs.readFileSync(targetPath, 'utf8')
             ctx.response.type = 'text/javascript'
-            ctx.response.body = buildModule(s)
+            ctx.response.body = buildModule({ source, translateNpmToUrl: true })
 
         } else {
             // the requeser wants the raw explorable
@@ -157,7 +157,7 @@ app.use(async (ctx, next) => {
 })
 
 
-app.use(serve('.'))
+app.use(serve(servePath))
 
 const PORT = 5000
  
