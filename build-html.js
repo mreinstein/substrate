@@ -75,7 +75,9 @@ export default function build ({ source, translateNpmToUrl }) {
             try {
                 const program = espree.parse(token.text, { ecmaVersion: 9, sourceType: 'module' })
 
-                if (translateNpmToUrl) { 
+                if (translateNpmToUrl) {
+                    token.text = translateNpm(token.text)
+                    /*
                     // find node imports and replace with url for cdn
                     // work from the bottom up to avoid positional index math due to changing the length of the string
                     Object.keys(program.body).reverse().forEach((idx) => {
@@ -88,6 +90,7 @@ export default function build ({ source, translateNpmToUrl }) {
                             token.text = token.text.slice(0,elem.source.start) + `'${val}'` + token.text.slice(elem.source.end, token.text.length)
                         }
                     });
+                    */
                 }
 
 

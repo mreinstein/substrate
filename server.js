@@ -9,6 +9,7 @@ import fs                   from 'fs'
 import { dirname, relative, resolve, sep } from 'path'
 import postcss              from 'postcss'
 import serve                from 'koa-static'
+import translateNpm         from './translate-npm-modules.js'
 import Koa                  from 'koa'
 import { fileURLToPath }    from 'url'
 
@@ -117,6 +118,14 @@ app.use(async (ctx, next) => {
         ctx.response.type = 'text/javascript'
         // run the css through autoprefixer, and send the content as a module
         ctx.response.body = await getCss(ctx.url)
+
+    } else if (ctx.url.endsWith('.js')) {
+        const targetPath = servePath + ctx.url
+        const source = fs.readFileSync(targetPath, 'utf8')
+
+        ctx.response.type = 'text/javascript'
+        ctx.response.body = translateNpm(source)
+
 
     } else if (ctx.url.endsWith('.explorable.md')) {
         const targetPath = servePath + ctx.url
