@@ -4,7 +4,27 @@ import espree     from 'https://cdn.skypack.dev/espree'
 import marked     from 'https://cdn.skypack.dev/marked'
 
 
-// build a runnable html page from literate markdown. 
+function translateNpm (source) {
+    const npmUrl = 'https://cdn.skypack.dev/'
+    const npmModuleRegx = RegExp('(^\/)|(^\.\/)|(^\..\/)|(^http)') /** find imports that do not begin with  "/", "./", or "../"   */
+
+    const program = espree.parse(source, { ecmaVersion: 9, sourceType: 'module' })
+
+    // find node imports and replace with url for cdn
+    // work from the bottom up to avoid positional index math due to changing the length of the string
+    Object.keys(program.body).reverse().forEach((idx) => {
+        const elem = program.body[idx]
+        
+        if (elem.type === 'ImportDeclaration' && !npmModuleRegx.test(elem.source.value)) {
+            const val = `${npmUrl}${elem.source.value}`;
+            elem.source.value = val
+            elem.source.raw = "\'" + val +"\'"
+            source = source.slice(0,elem.source.start) + `'${val}'` + source.slice(elem.source.end, source.length)
+        }
+    });
+
+    return source
+}
 
 
 // @param Object program  representation of a javascript program produced from esprima
@@ -16,12 +36,13 @@ function endsWithSnabbyBlock (program) {
 }
 
 
+// build a runnable html page from literate markdown. 
 export default function build ({ source, translateNpmToUrl }) {
     let explorableViewCount = 0
     let explorableViewIdx = 0
     
     let scriptContent = `
-        import __html   from 'https://cdn.jsdelivr.net/npm/snabby@2/snabby.js'
+        import __html   from 'https://cdn.skypack.dev/snabby'
         import __marked from 'https://cdn.skypack.dev/marked'
 
 
@@ -93,8 +114,7 @@ export default function build ({ source, translateNpmToUrl }) {
                     */
                 }
 
-
-                const isExplorable =(langParts[1] === 'explorable')
+                const isExplorable = (langParts[1] === 'explorable')
 
                 if (isExplorable && endsWithSnabbyBlock(program)) {
 
@@ -119,6 +139,7 @@ export default function build ({ source, translateNpmToUrl }) {
 
             } catch (er) {
                 // omit invalid javascript programs from the actual output
+                console.error('error:', er)
             }
 
         }
