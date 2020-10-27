@@ -1,6 +1,6 @@
 {
   "name": "substrate",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "type": "module",
   "description": "literate programming with javascript, markdown, and explorables",
   "main": "build.js",
