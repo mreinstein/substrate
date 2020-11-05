@@ -1,17 +1,16 @@
 #!/usr/bin/env node
 
 import autoprefixer         from 'autoprefixer'
-//import buildHtml            from './build-html.js'
 import buildModule          from 'substrate-build'
 import chalk                from 'chalk'
 import chokidar             from 'chokidar'
 import fs                   from 'fs'
-import { dirname, relative, resolve, sep } from 'path'
 import postcss              from 'postcss'
 import serve                from 'koa-static'
 import translateNpm         from './translate-npm-modules.js'
 import Koa                  from 'koa'
 import { fileURLToPath }    from 'url'
+import { dirname, relative, resolve, sep } from 'path'
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url))

@@ -28,7 +28,7 @@
     "html-escaper": "^3.0.0",
     "koa": "^2.13.0",
     "koa-static": "^5.0.0",
-    "marked": "^1.2.2",
+    "marked": "^1.2.3",
     "micro": "^9.3.4",
     "postcss": "^8.1.4",
     "serve-handler": "^6.1.3",

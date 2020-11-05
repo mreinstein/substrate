@@ -4,7 +4,7 @@ import espree     from 'https://cdn.skypack.dev/espree'
 import marked     from 'https://cdn.skypack.dev/marked'
 
 
-function translateNpm (source) {
+function translateNpmImportsToUrls (source) {
     const npmUrl = 'https://cdn.skypack.dev/'
     const npmModuleRegx = RegExp('(^\/)|(^\.\/)|(^\..\/)|(^http)') /** find imports that do not begin with  "/", "./", or "../"   */
 
@@ -27,7 +27,7 @@ function translateNpm (source) {
 }
 
 
-// @param Object program  representation of a javascript program produced from esprima
+// @param Object program  representation of a javascript program produced from espree
 function endsWithSnabbyBlock (program) {
     const lastEntry = program.body[program.body.length-1]
     return (lastEntry?.type === 'ExpressionStatement' &&
@@ -96,23 +96,8 @@ export default function build ({ source, translateNpmToUrl }) {
             try {
                 const program = espree.parse(token.text, { ecmaVersion: 9, sourceType: 'module' })
 
-                if (translateNpmToUrl) {
-                    token.text = translateNpm(token.text)
-                    /*
-                    // find node imports and replace with url for cdn
-                    // work from the bottom up to avoid positional index math due to changing the length of the string
-                    Object.keys(program.body).reverse().forEach((idx) => {
-                        const elem = program.body[idx]
-                        
-                        if (elem.type === 'ImportDeclaration' && !npmModuleRegx.test(elem.source.value)) {
-                            const val = `${npmUrl}${elem.source.value}`;
-                            elem.source.value = val
-                            elem.source.raw = "\'" + val +"\'"
-                            token.text = token.text.slice(0,elem.source.start) + `'${val}'` + token.text.slice(elem.source.end, token.text.length)
-                        }
-                    });
-                    */
-                }
+                if (translateNpmToUrl)
+                    token.text = translateNpmImportsToUrls(token.text)
 
                 const isExplorable = (langParts[1] === 'explorable')
 
@@ -192,7 +177,7 @@ export default function build ({ source, translateNpmToUrl }) {
         <head>
             <style>
             
-                * {
+                body {
                     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
                 }
 
@@ -206,11 +191,20 @@ export default function build ({ source, translateNpmToUrl }) {
                 .javascript-error {
                     color: ${errorColor};
                 }
+
+                code, code * {
+                    font-family: Consolas, Monaco, monospace;
+                }
+
+                pre code {
+                    font-size: 10pt;
+                }
+
             </style>
             
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/atom-one-light.min.css">
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
-            <script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/javascript.min.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/styles/arduino-light.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
+            <script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/languages/javascript.min.js"></script>
 
         </head>
         <body>
