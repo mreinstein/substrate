@@ -151,6 +151,9 @@ export default function build ({ source, translateNpmToUrl }) {
                     result = `<div id="explorable-view-${explorableViewIdx}"></div>` 
                 }
 
+                if (isExplorable)
+                    return result + `<details> <summary style="color: #888">Explorable Source</summary> <pre><code class="language-javascript">${escape(code)}</code></pre> </details>`
+
                 return result + `<pre><code class="language-javascript">${escape(code)}</code></pre>`
 
             } catch (er) {
