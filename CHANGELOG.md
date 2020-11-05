@@ -1,3 +1,9 @@
+# 6.2.0
+* render explorable blocks in collapsed <details> elements
+* fix highlight.js font rendering
+* update highlight.js to 10.3.2
+
+
 # 6.1.1
 * fix broken explorables
 
