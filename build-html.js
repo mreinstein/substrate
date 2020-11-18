@@ -1,6 +1,6 @@
 import { escape } from 'https://cdn.skypack.dev/html-escaper'
 import escodegen  from 'https://cdn.skypack.dev/escodegen'
-import espree     from 'https://cdn.skypack.dev/espree'
+import * as acorn from 'https://cdn.skypack.dev/acorn'
 import marked     from 'https://cdn.skypack.dev/marked'
 
 
@@ -8,7 +8,7 @@ function translateNpmImportsToUrls (source) {
     const npmUrl = 'https://cdn.skypack.dev/'
     const npmModuleRegx = RegExp('(^\/)|(^\.\/)|(^\..\/)|(^http)') /** find imports that do not begin with  "/", "./", or "../"   */
 
-    const program = espree.parse(source, { ecmaVersion: 9, sourceType: 'module' })
+    const program = acorn.parse(source, { ecmaVersion: 9, sourceType: 'module' })
 
     // find node imports and replace with url for cdn
     // work from the bottom up to avoid positional index math due to changing the length of the string
@@ -27,7 +27,7 @@ function translateNpmImportsToUrls (source) {
 }
 
 
-// @param Object program  representation of a javascript program produced from espree
+// @param Object program  representation of a javascript program produced from acorn
 function endsWithSnabbyBlock (program) {
     const lastEntry = program.body[program.body.length-1]
     return (lastEntry?.type === 'ExpressionStatement' &&
@@ -94,7 +94,7 @@ export default function build ({ source, translateNpmToUrl }) {
                 return
             
             try {
-                const program = espree.parse(token.text, { ecmaVersion: 9, sourceType: 'module' })
+                const program = acorn.parse(token.text, { ecmaVersion: 9, sourceType: 'module' })
 
                 if (translateNpmToUrl)
                     token.text = translateNpmImportsToUrls(token.text)
@@ -140,7 +140,7 @@ export default function build ({ source, translateNpmToUrl }) {
                 return `<pre><code class="language-${lang}">${escape(code)}</code></pre>`
      
             try {
-                const program = espree.parse(code, { ecmaVersion: 9, sourceType: 'module' })
+                const program = acorn.parse(code, { ecmaVersion: 9, sourceType: 'module' })
 
                 const isExplorable = (explorable === 'explorable')
                 let result = ''

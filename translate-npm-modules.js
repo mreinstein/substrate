@@ -1,11 +1,11 @@
-import espree from 'espree'
+import * as acorn from 'acorn'
 
 
 export default function translateNpm (source) {
     const npmUrl = 'https://cdn.skypack.dev/'
     const npmModuleRegx = RegExp('(^\/)|(^\.\/)|(^\..\/)|(^http)') /** find imports that do not begin with  "/", "./", or "../"   */
 
-    const program = espree.parse(source, { ecmaVersion: 9, sourceType: 'module' })
+    const program = acorn.parse(source, { ecmaVersion: 9, sourceType: 'module' })
 
     // find node imports and replace with url for cdn
     // work from the bottom up to avoid positional index math due to changing the length of the string

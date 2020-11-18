@@ -134,6 +134,12 @@ app.use(async (ctx, next) => {
             return
         }
 
+        // TODO: it seems sec-fetch-dest header isn't set when requesting over non-localhost address.non-localhost
+        //       is there some other http header we can check? or maybe we can set a header in the frontend?
+        //       perhaps the accept header is what we want.
+        // 
+        // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Supplying_request_options
+
         if (ctx.request.header['sec-fetch-dest'] === 'script') {
             // the requester wants javascript  (imported as module)
             const source = fs.readFileSync(targetPath, 'utf8')
