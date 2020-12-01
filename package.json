@@ -4,7 +4,9 @@
   "type": "module",
   "description": "literate programming with javascript, markdown, and explorables",
   "main": "build.js",
-  "bin": "./server.js",
+  "bin": {
+    "substrate": "server.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
