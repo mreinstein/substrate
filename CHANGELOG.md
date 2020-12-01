@@ -1,3 +1,7 @@
+# 6.4.0
+* implement hierarchical rendering in nav drawer #14
+
+
 # 6.3.1
 * re-publish npm module to remove some extraneous files that were included
 
