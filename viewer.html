@@ -157,8 +157,6 @@ function tocView (model, update) {
     // has a really nice looking toc:
     // https://www.joshwcomeau.com/animation/a-friendly-introduction-to-spring-physics/#when-to-stick-with-css-transitions
 
-    console.log('toc model:', model)
-
     const items = model.map((item) => {
         return html`<li @on:click=${() => item.elm.scrollIntoView()}
                         style="color: ${item.isIntersecting ? 'dodgerblue' : '' }">${item.text}</li>`
@@ -223,7 +221,6 @@ async function main() {
 
         model.explorables = await getList()
 
-        console.log('eep:', model.sourceUrl.slice(1))
         const lastModified = model.explorables[model.sourceUrl.slice(1)]
 
         if (lastModified !== model.lastModified) {
