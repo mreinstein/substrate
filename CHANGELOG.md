@@ -1,3 +1,10 @@
+# 6.5.0
+* generate table of contents from markdown header sections #4
+* allow scrolling to sections in table of contents #5
+* render the list of all explorables as a heierachical tree #15
+* add placeholder icon
+
+
 # 6.4.0
 * implement hierarchical rendering in nav drawer #14
 
