@@ -51,45 +51,82 @@
             padding-inline-start: 20px;
         }
 
+
+
+        /* tree-view specific */
+        ul.explorables {
+            padding-inline-start: 1em;
+            list-style-type: none;
+        }
+
+        ul.explorables-outer {
+            padding-inline-start: 0px;
+            list-style-type: none;
+        }
+
+        .current {
+            background-color: dodgerblue;
+            color: white;
+        }
+
+        .current > a {
+            color: white;
+        }
+
+        li {
+            padding: 4px 8px;
+        }
+
+
     </style>
 
 </head>
 <body>
 
-<h1>Available Modules</h1>
-<ul>
+<h1 style="display: flex; flex-direction: row; align-items: center;">
+    <img src="/substrate.svg" width="32" style="padding-right: 6px;"/>
+    Substrate
+</h1>
 
-</ul>
+<h2>Explorables</h2>
+
+<main></main>
 
 
 <script type="module">
+import delay    from 'https://cdn.skypack.dev/delay'
+import html     from 'https://cdn.skypack.dev/snabby'
+import treeView from '/tree-view.js'
 
-const ul = document.querySelector('ul')
-let list
+
+const model = {
+    currentVnode: document.querySelector('main'),
+    explorables: [ ]
+}
 
 
-async function fetchList () {
-    const response = await fetch('/poll/status')
-    const newList = await response.json()
+function update () {
+    const newVnode = view(model, update)
+    model.currentVnode = html.update(model.currentVnode, newVnode)
+}
 
-    if (JSON.stringify(newList) !== JSON.stringify(list)) {
-        list = newList
-        ul.innerHTML = ''
-        for (const path in list) {
-            const nicer = path.replace('.explorable.md', '')
-            const li = document.createElement('li')
-            li.innerHTML = `<a href="${nicer}">${nicer}</a>`
-            ul.appendChild(li)
-        }
-    }
+
+function view (model, update) {
+    return html`<main>${treeView(Object.keys(model.explorables))}</main>`
 }
 
 
 async function main() {
-    await fetchList()
-    
-    // poll the server for changes to current file and reload when it changes
-    setInterval(fetchList, 2000)
+
+    // poll the server for changes to list of available files and reload when it changes
+    while (true) {
+        const response = await fetch('/poll/status')
+        const newList = await response.json()
+        model.explorables = newList
+        update()
+
+        await delay(2000)
+    }
 }
 
 

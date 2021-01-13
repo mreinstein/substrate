@@ -113,6 +113,22 @@ app.use(async (ctx, next) => {
         ctx.response.type = 'text/javascript'
         ctx.response.body = fs.readFileSync(__dirname + sep + 'build-html.js', 'utf8')
 
+    } else if (ctx.url === '/tree-view.js') {
+        ctx.response.type = 'text/javascript'
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'tree-view.js', 'utf8')
+
+    } else if (ctx.url === '/substrate.svg') {
+        ctx.response.type = 'image/svg+xml'
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'substrate.svg', 'utf8')
+
+    } else if (ctx.url === '/favicon-32x32.png') {
+        ctx.response.type = 'image/png'
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'favicon-32x32.png')
+
+    } else if (ctx.url === '/favicon-16x16.png') {
+        ctx.response.type = 'image/png'
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'favicon-16x16.png')
+
     } else if (ctx.url.endsWith('.css')) {
         ctx.response.type = 'text/javascript'
         // run the css through autoprefixer, and send the content as a module

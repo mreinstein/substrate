@@ -179,7 +179,10 @@ export default function build ({ source, translateNpmToUrl }) {
         <html>
         <head>
             <style>
-            
+                html {
+                    scroll-behavior: smooth;
+                }
+                
                 body {
                     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
                 }

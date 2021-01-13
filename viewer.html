@@ -22,32 +22,53 @@
             left: 0px;
             width: 100%;
             height: 48px;
-            background-color: rgba(255,255,255,0.8);
+            background-color: whitesmoke;
             display: flex;
             align-items: center;
             padding: 6px;
             box-sizing: border-box;
+            border-bottom: 1px solid #dcd5d5;
         }
 
         .outer-container {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 240px;
             grid-template-rows: 1fr;
-            grid-template-areas: "preview";
+            grid-template-areas: "preview toc";
             grid-gap: 0px;
 
-            margin-top: 30px;
+            margin-top: 48px;
             position: absolute;
             top: 0px;
             left: 0px;
             width: 100%;
-            height: 100%;
+            height: calc(100% - 48px);
         }
 
         .preview-pane {
             grid-area: preview;
-            padding: 10px;
+            padding: 40px;
+            padding-top: 0px;
+            padding-right: 0px;
             background-color: white;
+        }
+
+        .toc {
+            grid-area: toc;
+            padding: 10px;
+            color: black;
+            font-size: 0.8em;
+        }
+
+        .toc li {
+            cursor: pointer;
+            color: gray;
+            padding-left: 4px;
+            padding-bottom: 10px;
+        }
+
+        .toc li:hover {
+            color: black;
         }
 
         iframe {
@@ -64,6 +85,7 @@
             padding: 10px;
         }
 
+        /* tree-view specific */
         ul.explorables {
             padding-inline-start: 1em;
             list-style-type: none;
@@ -87,8 +109,6 @@
             padding: 4px 8px;
         }
 
-        
-
     </style>
 
 </head>
@@ -98,24 +118,34 @@
     <div class="preview-pane">
         <iframe></iframe>
     </div>
+    <div class="toc"></div>
 </div>
 
 <main></main>
 
 
 <script type="module">
-import build  from '/build-html.js'
-import drawer from 'https://cdn.jsdelivr.net/gh/mreinstein/snabbdom-drawer/drawer.js'
-import html   from 'https://cdn.skypack.dev/snabby'
+import build    from '/build-html.js'
+import delay    from 'https://cdn.skypack.dev/delay'
+import drawer   from 'https://cdn.jsdelivr.net/gh/mreinstein/snabbdom-drawer/drawer.js'
+import html     from 'https://cdn.skypack.dev/snabby'
+import treeView from '/tree-view.js'
 
 
 const model = {
     currentVnode: document.querySelector('main'),
+    currentVnode2: document.querySelector('.toc'),
+
     drawer: drawer.init({ open: false }),
     explorables: { },
     lastModified: undefined,
-    sourceUrl: '__SOURCE__'
+    sourceUrl: '__SOURCE__',
+    observer: undefined,
+
+    // ordered list of headings with name and intersecting booleans
+    tableOfContents: [ ]
 }
+
 
 function toggleDrawer (model, update) {
     model.drawer.open = !model.drawer.open
@@ -123,62 +153,39 @@ function toggleDrawer (model, update) {
 }
 
 
-function treeView (filenames) {
-    // convert flat filenames into a tree structure
-    const tree = { }
+function tocView (model, update) {
+    // has a really nice looking toc:
+    // https://www.joshwcomeau.com/animation/a-friendly-introduction-to-spring-physics/#when-to-stick-with-css-transitions
 
-    for (const f of filenames) {
-        let currentNode = tree
-        const parts = f.split('/');
-        for (const part of parts) {
-            if (part.endsWith('.explorable.md')) {
-                currentNode[part] = f
-            } else {
-                if (!currentNode[part])
-                    currentNode[part] = { }
-                currentNode = currentNode[part]
-            }
-        }
-    }
+    console.log('toc model:', model)
 
-    const renderNode = function (key, node) {
-        const isLeaf = (typeof node === 'string')
-        if (isLeaf) {
-            const k = '/' + node.replace('.explorable.md', '')
-            const isCurrentPage = window.location.pathname === k
+    const items = model.map((item) => {
+        return html`<li @on:click=${() => item.elm.scrollIntoView()}
+                        style="color: ${item.isIntersecting ? 'dodgerblue' : '' }">${item.text}</li>`
+    })
 
-            const label = key.replace('.explorable.md', '')
-            const inner = isCurrentPage ? label : html`<a href="${k}">${label}</a>`
-
-            return html`<li @class:current=${isCurrentPage}>${inner}</li>`
-        }
-        
-        const results = [ ]
-        for (const childName in node) {
-            results.push(renderNode(childName, node[childName]))
-        }
-
-        return html`<li><span style="font-weight: bold; color: #333;">${key+'/'}</span><ul class="explorables" data-key=${key}>${results}</ul></li>`
-    }
-
-    const nodes = [ ]
-    for (const key in tree)
-        nodes.push(renderNode(key, tree[key]))
-
-    return html` <ul class="explorables-outer">${nodes}</ul>`
+    return html`<div class="toc">
+        <h3 style="color: #444; text-transform: uppercase; letter-spacing: 2px;">Table of Contents</h3>
+        <ul style="padding: 0; list-style-type: none;">${items}</ul>
+    </div>`
 }
 
 
 function view (model, update) {
     const contentView = html`
         <div>
-            <h3>Explorables</h3>
+            <h3 style="display: flex; flex-direction: row; align-items: center;">
+                <img src="/substrate.svg" width="32" style="padding-right: 6px;"/>
+                <a href="/">Substrate</a>
+            </h3>
+            <h4>Explorables</h4>
             ${treeView(Object.keys(model.explorables))}
         </div>`
 
     return html`<main>
         <header>
             <button class="hamburger" @on:click=${() => toggleDrawer(model, update)}>☰</button>
+            <h1 style="color: #353535; font-size: 1em; padding-left: 10px;">${model.sourceUrl.slice(1)}</h1>
         </header>
         ${drawer.view(model, contentView, update)}
     </main>`
@@ -188,6 +195,9 @@ function view (model, update) {
 function update () {
     const newVnode = view(model, update)
     model.currentVnode = html.update(model.currentVnode, newVnode)
+
+    const newVnode2 = tocView(model.tableOfContents, update)
+    model.currentVnode2 = html.update(model.currentVnode2, newVnode2)
 }
 
 
@@ -208,34 +218,54 @@ async function buildSource (sourceUrl) {
 async function main() {
     const iframe = document.querySelector('iframe')
 
-    const data = await Promise.all([
-        getList(),
-        buildSource(model.sourceUrl)
-    ])
-
-    model.explorables = data[0]
-    const htmlOutput = data[1]
-    iframe.srcdoc = htmlOutput
-    update()
-
     // poll the server for changes to current file and reload when it changes
-    setInterval(async function () {
+    while (true) {
+
         model.explorables = await getList()
 
-        const entry = model.explorables[model.sourceUrl.slice(1)]
+        console.log('eep:', model.sourceUrl.slice(1))
+        const lastModified = model.explorables[model.sourceUrl.slice(1)]
 
-        if (!model.lastModified) {
-            model.lastModified = entry
-            update()
-        } else if (entry !== model.lastModified) {
-            model.lastModified = entry
+        if (lastModified !== model.lastModified) {
+            model.lastModified = lastModified
 
             const htmlOutput = await buildSource(model.sourceUrl)
             iframe.srcdoc = htmlOutput
-            update()
-        }
-    }, 2000)
 
+            iframe.onload = function () {
+                const headings = iframe.contentDocument.querySelectorAll('h1,h2,h3,h4')
+
+                model.tableOfContents.length = 0
+                for (const h of headings) {
+                    model.tableOfContents.push({
+                        elm: h,
+                        text: h.innerHTML,
+                        isIntersecting: false
+                    })
+                }
+                
+                model.observer?.disconnect()
+
+                const callback = (entries/*, observe*/) => {
+                    for (const e of entries) {
+                        const entry = model.tableOfContents.find((t) => t.elm === e.target)
+                        if (entry)
+                            entry.isIntersecting = e.isIntersecting
+                    }
+                    update()
+                }
+
+                model.observer = new IntersectionObserver(callback, { root: iframe.contentDocument })
+                for (const e of headings)
+                    model.observer.observe(e)
+
+                update()
+            }
+
+        }
+
+        await delay(2000)
+    }
 }
 
 
