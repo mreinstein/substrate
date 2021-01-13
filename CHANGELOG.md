@@ -1,3 +1,7 @@
+# 6.5.1
+* remove debug console statements
+
+
 # 6.5.0
 * generate table of contents from markdown header sections #4
 * allow scrolling to sections in table of contents #5
