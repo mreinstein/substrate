@@ -13,12 +13,20 @@ I think the reason for this is they are independent systems. When you create lit
 they don't interoperate with the gigantic universe of pre-existing code running out in the wild.
 
 
+Substrate makes some practical tradeoffs to make it usable today, in production code, without much pain:
+* only works with javascript currently (no multi language support)
+* there is a 1:1 mapping between a substrate document and a produced javascript file
+* there is no runtime environment; a substrate document is a pretty simple transformation into a javascript file
+
+
 A substrate document is a markdown file. The files are named like `somedoc.explorable.md`.
 
 Like many literate programming tools, it is possible to put code into fenced blocks, like this:
 
-```javascript
+```
+\`\`\`javascript
 // some javascript code declared here
+\`\`\`
 ```
 
 These blocks get included as part of the weaved output.
@@ -27,8 +35,10 @@ Substrate adds another block type henceforth referred to as an `explorable`. A a
 but it is excluded from the weaved output. An explorable block is useful in providing working, interactive examples of the code 
 in the document when viewing the rich view.
 
-```javascript explorable
-
+```
+\`\`\`javascript explorable
+// code you want to run when viewing the human readable file (excluded from output)
+\`\`\`
 ```
 
 When an explorable file is weaved into runnable code, it produces a javascript file.
@@ -74,3 +84,5 @@ import bar from './bar.js'             // a typical javascript module
 ```
 
 Other build systems (webpack, etc.) shouldn't be hard to add, but I just haven't gotten to that yet.
+
+TODO: explain how `javascript explorable` blocks work in more detail.
