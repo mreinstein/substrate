@@ -50,7 +50,7 @@ explorable documents can:
 * import other explorable files. e.g., `import something from './my-explorable.md'`
 
 
-## Integrating substrate into you current build process
+## Integrating substrate into your current build process
 
 I've written a rollup plugin that is able to import `explorable.md` files and weave them into usable javascript modules.
 
@@ -62,15 +62,15 @@ import substrate from 'rollup-plugin-substrate'
 
 
 export default {
-	input: 'app.js',
+    input: 'app.js',
     output: {
         file: 'app-bundle.js'
     },
-	plugins: [
-		resolve(),
-	    commonjs(),
-	    substrate()
-	]
+    plugins: [
+        resolve(),
+        commonjs(),
+        substrate()
+    ]
 }
 ```
 
