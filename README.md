@@ -86,3 +86,22 @@ import bar from './bar.js'             // a typical javascript module
 Other build systems (webpack, etc.) shouldn't be hard to add, but I just haven't gotten to that yet.
 
 TODO: explain how `javascript explorable` blocks work in more detail.
+
+## Human readable explorable view
+
+Since this is a system wide tool, you'll likely want to install substrate as a global module:
+
+`npm install -g substrate`
+
+This will make a command line utility available. You invoke it, passing a directory containing `.explorable.md` files you'd like to view:
+
+```bash
+> substrate ~/Desktop
+```
+
+This will recursively traverse the given directory (or the current working directory if one isn't specified,) look for all files that end with `explorable.md`,
+and start a webserver. While this is running you can open http://localhost:5000 in your browser and see all of the available explorables to browse. The command line will not exit, continuing to watch the input directory for added/removed/edited explorable files and make them available.
+
+TODO: add more details on the explorable viewer.
+
+
