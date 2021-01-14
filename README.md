@@ -46,7 +46,7 @@ When an explorable file is weaved into runnable code, it produces a javascript f
 **Because an explorable file has a 1:1 mapping with an output javascript file, it means you can incrementally add literate programming to your production code!**
 
 explorable documents can:
-* import modern es modules. e.g., `import clamp from https://cdn.skypack.dev/clamp`
+* import modern es modules. e.g., `import clamp from 'https://cdn.skypack.dev/clamp'`
 * import other explorable files. e.g., `import something from './my-explorable.md'`
 
 
@@ -54,7 +54,7 @@ explorable documents can:
 
 I've written a rollup plugin that is able to import `explorable.md` files and weave them into usable javascript modules.
 
-here's how you might include substrate support in rollup.config.js:
+here's how you might include substrate support in rollup.config.js, in a typical node/npm based build step:
 ```javascript
 import commonjs  from '@rollup/plugin-commonjs'
 import resolve   from '@rollup/plugin-node-resolve'
