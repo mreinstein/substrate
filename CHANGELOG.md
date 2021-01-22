@@ -1,3 +1,8 @@
+# 6.5.2
+* add some really basic, terrible documentation
+* lightly tweak the tree view styles
+
+
 # 6.5.1
 * remove debug console statements
 
