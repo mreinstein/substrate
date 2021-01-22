@@ -35,7 +35,8 @@ const assets = { } // key is path to explorable file, value is last modified tim
 
 
 const watcher = chokidar.watch(`${servePath}/**/*.explorable.md`).on('all', (event, path) => {
-    const relativePath = relative(servePath, path)
+     // translate windows path for url
+    const relativePath = relative(servePath, path).replace(/\\/g,'/')
 
     if (!path.endsWith('.explorable.md'))
         return
@@ -172,6 +173,8 @@ app.use(async (ctx, next) => {
         // TODO: cache built module result like we do for css
 
     } else {
+        // translate to windows path
+        ctx.url.replace(/\/g,'\\'/);
         const targetPath = servePath + ctx.url + '.explorable.md'
         if (fs.existsSync(targetPath)) {
             const derp = ctx.url + '.explorable.md'
