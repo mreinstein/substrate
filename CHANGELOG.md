@@ -1,3 +1,7 @@
+# 6.5.3
+* fix windows support
+
+
 # 6.5.2
 * add some really basic, terrible documentation
 * lightly tweak the tree view styles
