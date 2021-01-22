@@ -122,6 +122,12 @@ async function main() {
     while (true) {
         const response = await fetch('/poll/status')
         const newList = await response.json()
+        // translate windows path to url path
+        Object.keys(newList).forEach((key) => {
+            const k = key.replace(/\\/g,'/');
+            newList[k] = newList[key];
+            delete newList[key];
+        });
         model.explorables = newList
         update()
 
