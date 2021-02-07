@@ -1,3 +1,8 @@
+# 6.6.0
+* replace HTTP polling with Server Sent Events (sse)
+* update deps
+
+
 # 6.5.3
 * fix windows support
 
