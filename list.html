@@ -95,7 +95,6 @@
 
 
 <script type="module">
-import delay    from 'https://cdn.skypack.dev/delay'
 import html     from 'https://cdn.skypack.dev/snabby'
 import treeView from '/tree-view.js'
 
@@ -119,14 +118,12 @@ function view (model, update) {
 
 async function main() {
 
-    // poll the server for changes to list of available files and reload when it changes
-    while (true) {
-        const response = await fetch('/poll/status')
-        const newList = await response.json()
+    const connection = new EventSource(`/sse`, { withCredentials: false })
+
+    connection.onmessage = function (ev) {
+        const newList = JSON.parse(ev.data)
         model.explorables = newList
         update()
-
-        await delay(2000)
     }
 }
 

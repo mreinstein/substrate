@@ -9,6 +9,7 @@ import postcss              from 'postcss'
 import serve                from 'koa-static'
 import translateNpm         from './translate-npm-modules.js'
 import Koa                  from 'koa'
+import { PassThrough }      from 'stream'
 import { fileURLToPath }    from 'url'
 import { dirname, relative, resolve, sep } from 'path'
 
@@ -101,14 +102,36 @@ async function getCss (url) {
 }
 
 
+// adapted from https://medium.com/trabe/server-sent-events-sse-streams-with-node-and-koa-d9330677f0bf
+app.use(async (ctx, next) => {
+    if (ctx.path !== '/sse')
+      return await next()
+
+    ctx.request.socket.setTimeout(0)
+    ctx.req.socket.setNoDelay(true)
+    ctx.req.socket.setKeepAlive(true)
+
+    ctx.set({
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive",
+      'X-Accel-Buffering': 'no'
+    });
+
+    const stream = new PassThrough()
+
+    ctx.status = 200
+    ctx.body = stream
+
+    setInterval(() => {
+        stream.write(`data: ${JSON.stringify(assets)}\n\n`)
+    }, 1000)
+})
+
 app.use(async (ctx, next) => {
     if (ctx.url === '/') { 
         ctx.response.type = 'text/html'
         ctx.response.body = fs.readFileSync(__dirname + sep + 'list.html', 'utf8')
-
-    } else if (ctx.url === '/poll/status') {
-        ctx.response.type = 'application/json'
-        ctx.response.body = assets
 
     } else if (ctx.url === '/build-html.js') {
         ctx.response.type = 'text/javascript'

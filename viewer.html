@@ -127,7 +127,6 @@
 
 <script type="module">
 import build    from '/build-html.js'
-import delay    from 'https://cdn.skypack.dev/delay'
 import drawer   from 'https://cdn.jsdelivr.net/gh/mreinstein/snabbdom-drawer/drawer.js'
 import html     from 'https://cdn.skypack.dev/snabby'
 import treeView from '/tree-view.js'
@@ -200,12 +199,6 @@ function update () {
 }
 
 
-async function getList () {
-    const response = await fetch('/poll/status')
-    return response.json()
-}
-
-
 async function buildSource (sourceUrl) {
     const response = await fetch(sourceUrl)
     const source = await response.text()
@@ -214,16 +207,17 @@ async function buildSource (sourceUrl) {
 }
 
 
-async function main() {
+async function main () {
     const iframe = document.querySelector('iframe')
 
-    // poll the server for changes to current file and reload when it changes
-    while (true) {
+    const connection = new EventSource(`/sse`, { withCredentials: false })
 
-        model.explorables = await getList()
-
+    connection.onmessage = async function (ev) {
+        const prevKeys = JSON.stringify(Object.keys(model.explorables))
+        model.explorables = JSON.parse(ev.data)
+        const newKeys = JSON.stringify(Object.keys(model.explorables))
         const lastModified = model.explorables[model.sourceUrl.slice(1)]
-
+        
         if (lastModified !== model.lastModified) {
             model.lastModified = lastModified
 
@@ -259,10 +253,9 @@ async function main() {
 
                 update()
             }
-
+        } else if (prevKeys !== newKeys) {
+            update()
         }
-
-        await delay(2000)
     }
 }
 
