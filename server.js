@@ -123,6 +123,7 @@ app.use(async (ctx, next) => {
     ctx.status = 200
     ctx.body = stream
 
+    // TODO: rather than poll, only send data when the watched files actually change
     setInterval(() => {
         stream.write(`data: ${JSON.stringify(assets)}\n\n`)
     }, 1000)
