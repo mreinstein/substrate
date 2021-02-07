@@ -1,3 +1,7 @@
+# 6.6.1
+* send page data immediately rather than waiting for 1 second
+
+
 # 6.6.0
 * replace HTTP polling with Server Sent Events (sse)
 * update deps
