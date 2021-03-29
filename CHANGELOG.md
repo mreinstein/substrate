@@ -1,3 +1,8 @@
+# 6.6.2
+* update deps
+* stop disabling touch-action in the viewer page
+
+
 # 6.6.1
 * send page data immediately rather than waiting for 1 second
 
