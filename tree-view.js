@@ -1,4 +1,4 @@
-import html from 'https://cdn.skypack.dev/snabby'
+import html from 'https://cdn.skypack.dev/snabby?min'
 
 
 export default function treeView (filenames) {

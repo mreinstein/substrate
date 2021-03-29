@@ -1,7 +1,7 @@
-import { escape } from 'https://cdn.skypack.dev/html-escaper'
-import escodegen  from 'https://cdn.skypack.dev/escodegen'
-import * as acorn from 'https://cdn.skypack.dev/acorn'
-import marked     from 'https://cdn.skypack.dev/marked'
+import { escape } from 'https://cdn.skypack.dev/html-escaper?min'
+import escodegen  from 'https://cdn.skypack.dev/escodegen?min'
+import * as acorn from 'https://cdn.skypack.dev/acorn?min'
+import marked     from 'https://cdn.skypack.dev/marked?min'
 
 
 function translateNpmImportsToUrls (source) {
