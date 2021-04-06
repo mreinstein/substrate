@@ -208,15 +208,15 @@ export default function build ({ source, translateNpmToUrl }) {
 
             </style>
             
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/styles/arduino-light.min.css">
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
-            <script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/languages/javascript.min.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/styles/arduino-light.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/highlight.min.js"></script>
+            <script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/languages/javascript.min.js"></script>
 
         </head>
         <body>
         ${html}
         <script type="module">
-            hljs.initHighlighting()
+            hljs.highlightAll()
             ${scriptContent}
         </script>
         </body>
