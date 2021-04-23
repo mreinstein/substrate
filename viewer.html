@@ -158,12 +158,11 @@ function toggleDrawer (model, update) {
 
 
 function tocView (model, update) {
-    // has a really nice looking toc:
-    // https://www.joshwcomeau.com/animation/a-friendly-introduction-to-spring-physics/#when-to-stick-with-css-transitions
-
     const items = model.map((item) => {
+        const headerlevel = parseInt(item.elm.tagName.substring(1), 10)
+        const paddingLeft = 2 + (headerlevel - 1) * 18 + 'px';
         return html`<li @on:click=${() => item.elm.scrollIntoView()}
-                        style="color: ${item.isIntersecting ? 'dodgerblue' : '' }">${item.text}</li>`
+                        style="color: ${item.isIntersecting ? 'dodgerblue' : '' }; padding-left: ${paddingLeft}">${item.text}</li>`
     })
 
     return html`<div class="toc">
