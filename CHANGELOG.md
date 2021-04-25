@@ -1,3 +1,7 @@
+# 6.7.3
+* make table of contents stand out from document a bit more
+
+
 # 6.7.2
 * tweak padding on preview iframe
 
