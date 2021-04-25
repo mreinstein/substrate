@@ -1,3 +1,11 @@
+# 6.7.1
+* scroll the table of contents when it's taller than viewport height
+
+
+# 6.7.0
+* indent table of contents items by heading level
+
+
 # 6.6.3
 * update deps
 
