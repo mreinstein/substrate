@@ -1,3 +1,7 @@
+# 6.7.2
+* tweak padding on preview iframe
+
+
 # 6.7.1
 * scroll the table of contents when it's taller than viewport height
 
