@@ -1,3 +1,11 @@
+# 6.8.0
+* use pinned versions of modules from skypack for better performance
+* centralize dependencies into deps.js
+* fix postcss command line warning
+* update highlight.js to 10.7.2, embed locally
+* update several npm dependencies
+
+
 # 6.7.3
 * make table of contents stand out from document a bit more
 
