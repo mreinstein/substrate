@@ -75,7 +75,7 @@ function cacheUpdate (url, t, content) {
 async function processCss (url) {
     //const css = fs.createReadStream(servePath + url)
     const css = fs.readFileSync(servePath + url, 'utf8')
-    const result = await postcss([ autoprefixer ]).process(css)
+    const result = await postcss([ autoprefixer ]).process(css, { from: undefined })
     result.warnings().forEach(warn => { console.warn(warn.toString()) })
 
     return `const css = \`${result.css}\`\nexport default css`
@@ -140,6 +140,26 @@ app.use(async (ctx, next) => {
     } else if (ctx.url === '/build-html.js') {
         ctx.response.type = 'text/javascript'
         ctx.response.body = fs.readFileSync(__dirname + sep + 'build-html.js', 'utf8')
+
+    } else if (ctx.url === '/deps.js') {
+        ctx.response.type = 'text/javascript'
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'deps.js', 'utf8')
+
+    } else if (ctx.url === '/highlightjs-10.7.2/default.min.css') {
+        ctx.response.type = 'text/css'
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-10.7.2/default.min.css', 'utf8')
+
+    } else if (ctx.url === '/highlightjs-10.7.2/arduino-light.min.css') {
+        ctx.response.type = 'text/css'
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-10.7.2/arduino-light.min.css', 'utf8')
+
+    } else if (ctx.url === '/highlightjs-10.7.2/highlight.min.js') {
+        ctx.response.type = 'text/javascript'
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-10.7.2/highlight.min.js', 'utf8')
+
+    } else if (ctx.url === '/highlightjs-10.7.2/javascript.min.js') {
+        ctx.response.type = 'text/javascript'
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-10.7.2/javascript.min.js', 'utf8')
 
     } else if (ctx.url === '/tree-view.js') {
         ctx.response.type = 'text/javascript'

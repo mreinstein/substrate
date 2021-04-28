@@ -1,7 +1,4 @@
-import { escape } from 'https://cdn.skypack.dev/html-escaper?min'
-import escodegen  from 'https://cdn.skypack.dev/escodegen?min'
-import * as acorn from 'https://cdn.skypack.dev/acorn?min'
-import marked     from 'https://cdn.skypack.dev/marked?min'
+import { escape, escodegen, acorn, marked } from '/deps.js'
 
 
 function translateNpmImportsToUrls (source) {
@@ -42,9 +39,8 @@ export default function build ({ source, translateNpmToUrl }) {
     let explorableViewIdx = 0
     
     let scriptContent = `
-        import __html   from 'https://cdn.skypack.dev/snabby'
-        import __marked from 'https://cdn.skypack.dev/marked'
-
+        import { html as __html, marked as __marked } from '/deps.js'
+       
 
         const __vnodes = [ ]
         const __viewFns = [ ]
@@ -208,9 +204,9 @@ export default function build ({ source, translateNpmToUrl }) {
 
             </style>
             
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/styles/arduino-light.min.css">
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/highlight.min.js"></script>
-            <script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/languages/javascript.min.js"></script>
+            <link rel="stylesheet" href="/highlightjs-10.7.2/arduino-light.min.css">
+            <script src="/highlightjs-10.7.2/highlight.min.js"></script>
+            <script charset="UTF-8" src="/highlightjs-10.7.2/javascript.min.js"></script>
 
         </head>
         <body>

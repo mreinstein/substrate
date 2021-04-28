@@ -132,10 +132,9 @@
 
 
 <script type="module">
-import build    from '/build-html.js'
-import drawer   from 'https://cdn.jsdelivr.net/gh/mreinstein/snabbdom-drawer@latest/drawer.js'
-import html     from 'https://cdn.skypack.dev/snabby?min'
-import treeView from '/tree-view.js'
+import build            from '/build-html.js'
+import { drawer, html } from '/deps.js' 
+import treeView         from '/tree-view.js'
 
 
 const model = {

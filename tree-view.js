@@ -1,4 +1,4 @@
-import html from 'https://cdn.skypack.dev/snabby?min'
+import { html } from '/deps.js'
 
 
 export default function treeView (filenames) {

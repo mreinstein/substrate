@@ -55,7 +55,7 @@ We can put imports at the end if we like, much like references in a more traditi
 We can also import stuff directly from npm without needing to `npm install`! skypack is amazing!
 
 ```javascript
-import constraintSolver from 'https://cdn.skypack.dev/constraint-solver@^3.0.1'
+import constraintSolver from 'https://cdn.skypack.dev/constraint-solver'
 ```
 
 You can import other explorables too
