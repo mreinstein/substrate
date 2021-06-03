@@ -1,6 +1,11 @@
+# 6.8.2
+* update deps
+
+
 # 6.8.1
 * tweak margin on list page
 * tweak padding on viewer page
+
 
 # 6.8.0
 * use pinned versions of modules from skypack for better performance
