@@ -1,3 +1,7 @@
+# 7.0.0
+* update markdown parser and other deps
+
+
 # 6.8.2
 * update deps
 
