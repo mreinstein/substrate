@@ -24,11 +24,11 @@ const initialPath = args.shift() || ''
 const servePath = resolve(initialPath)
 
 if (!fs.existsSync(servePath)) {
-    console.error(chalk.red`Error!`, `The input path ${chalk.redBright`${servePath}`} does not exist.`)
+    console.error(`${chalk.red('Error!')} The input path ${chalk.redBright(servePath)} does not exist.`)
     process.exit(1)
 }
 
-console.log(chalk.gray`Searching ${servePath} for .explorable.md modules:\n`)
+console.log(chalk.gray(`Searching ${servePath} for .explorable.md modules:\n`))
 
 const cache = { }  // key is url, value is content to serve
 const mtime = { }  // key is url, value is timestamp that the file was last changed
@@ -43,22 +43,21 @@ const watcher = chokidar.watch(`${servePath}/**/*.explorable.md`).on('all', (eve
         return
 
     if (event === 'add') {
-        console.log(chalk.green`      [found]`, chalk.whiteBright`${relativePath}`)
+        console.log(`${chalk.green('      [found]')} ${chalk.whiteBright(relativePath)}`)
         const s = fs.statSync(path)
         assets[relativePath] = s.mtimeMs
 
     } else if (event === 'unlink') {
-        console.log(chalk.red`    [removed]`, chalk.whiteBright`${relativePath}`)
+        console.log(chalk.red('    [removed]'), chalk.whiteBright(relativePath))
         delete assets[relativePath]
 
     } else if (event === 'change') { 
-        console.log(chalk.yellowBright`    [changed]`, chalk.whiteBright`${relativePath}`)
+        console.log(chalk.yellowBright('    [changed]'), chalk.whiteBright(relativePath))
         const s = fs.statSync(path)
         assets[relativePath] = s.mtimeMs
 
     } else {
-        console.log(chalk.yellowBright`event:`, event, ' path:', relativePath)
-
+        console.log(chalk.yellowBright('event:'), event, ' path:', relativePath)
     }
 })
 
@@ -194,7 +193,7 @@ app.use(async (ctx, next) => {
         const targetPath = servePath + ctx.url
 
         if (!fs.existsSync(targetPath)) {
-            console.error(chalk.red`        [404]`, chalk.redBright`${targetPath}`, 'does not exist.')
+            console.error(chalk.red('        [404]'), chalk.redBright(targetPath), 'does not exist.')
             return
         }
 
