@@ -1,3 +1,7 @@
+# 8.1.0
+* ignore all node_modules directories when watching
+
+
 # 8.0.0
 * update markdown parser and other deps
 
