@@ -30,12 +30,12 @@ if (!fs.existsSync(servePath)) {
 
 console.log(chalk.gray(`Searching ${servePath} for .explorable.md modules:\n`))
 
-const cache = { }  // key is url, value is content to serve
-const mtime = { }  // key is url, value is timestamp that the file was last changed
+const cache  = { } // key is url, value is content to serve
+const mtime  = { } // key is url, value is timestamp that the file was last changed
 const assets = { } // key is path to explorable file, value is last modified time
 
 
-const watcher = chokidar.watch(`${servePath}/**/*.explorable.md`).on('all', (event, path) => {
+const watcher = chokidar.watch(`${servePath}/**/*.explorable.md`, { ignored: '**/node_modules/**' }).on('all', (event, path) => {
      // translate windows path for url
     const relativePath = relative(servePath, path).replace(/\\/g,'/')
 
