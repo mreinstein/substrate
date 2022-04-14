@@ -12,16 +12,24 @@ import Koa                  from 'koa'
 import { PassThrough }      from 'stream'
 import { fileURLToPath }    from 'url'
 import { dirname, relative, resolve, sep } from 'path'
+import commandLineArgs      from 'command-line-args';
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 console.log('\n')
 
-// parse the path from the command line argument
-const args = process.argv.slice(2)
-const initialPath = args.shift() || ''
-const servePath = resolve(initialPath)
+// configure port and path from command line arguments
+// useable from cli as 
+//      --directory || -d
+//      --port      || -p
+const cmdOptions = [
+    { name: 'directory', alias: 'd', defaultValue: '', type: String },
+    { name: 'port', alias: 'p', defaultValue: 5000, type: Number}
+];
+
+const cmdSettings = commandLineArgs(cmdOptions);
+const servePath = resolve(cmdSettings.directory);
 
 if (!fs.existsSync(servePath)) {
     console.error(`${chalk.red('Error!')} The input path ${chalk.redBright(servePath)} does not exist.`)
@@ -238,8 +246,8 @@ app.use(async (ctx, next) => {
 
 app.use(serve(servePath))
 
-const PORT = 5000
+const PORT = cmdSettings.port;
  
-app.listen(5000)
+app.listen(PORT)
  
-console.log(`Substrate server listening on port ${PORT}`)
+console.log(`Substrate server listening on port ${PORT}`);
