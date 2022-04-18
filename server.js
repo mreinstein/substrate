@@ -21,8 +21,6 @@ let cmdSettings, initialPath, args;
 
 console.log('\n')
 
-console.log('process argv ', process.argv)
-
 // configure port and path from command line arguments
 // useable from cli as 
 //      --directory || -d
