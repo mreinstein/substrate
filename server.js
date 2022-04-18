@@ -15,9 +15,13 @@ import { dirname, relative, resolve, sep } from 'path'
 import commandLineArgs      from 'command-line-args';
 
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const __dirname = dirname(fileURLToPath(import.meta.url));
+let cmdSettings, initialPath, args;
+
 
 console.log('\n')
+
+console.log('process argv ', process.argv)
 
 // configure port and path from command line arguments
 // useable from cli as 
@@ -28,8 +32,16 @@ const cmdOptions = [
     { name: 'port', alias: 'p', defaultValue: 5000, type: Number}
 ];
 
-const cmdSettings = commandLineArgs(cmdOptions);
-const servePath = resolve(cmdSettings.directory);
+// backward compatibility for running root>node substrate <directory>
+if (process.argv.length === 3) {
+    args = process.argv.slice(2);
+} else {
+    cmdSettings = commandLineArgs(cmdOptions);
+}
+
+initialPath = !cmdSettings ? args.shift() || '' : cmdSettings.directory;
+const servePath = resolve(initialPath);
+
 
 if (!fs.existsSync(servePath)) {
     console.error(`${chalk.red('Error!')} The input path ${chalk.redBright(servePath)} does not exist.`)
@@ -246,7 +258,7 @@ app.use(async (ctx, next) => {
 
 app.use(serve(servePath))
 
-const PORT = cmdSettings.port;
+const PORT = cmdSettings?.port || 5000;
  
 app.listen(PORT)
  
