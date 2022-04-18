@@ -27,10 +27,12 @@ console.log('\n')
 //      --port      || -p
 const cmdOptions = [
     { name: 'directory', alias: 'd', defaultValue: '', type: String },
-    { name: 'port', alias: 'p', defaultValue: 5000, type: Number}
+    { name: 'port', alias: 'p', defaultValue: 5000, type: Number }
 ];
 
-// backward compatibility for running root>node substrate <directory>
+// backward compatibility for 
+//  substrate <directory>
+//  root>node server.js <directory>
 if (process.argv.length === 3) {
     args = process.argv.slice(2);
 } else {
