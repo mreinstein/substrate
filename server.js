@@ -144,21 +144,21 @@ app.use(async (ctx, next) => {
         ctx.response.type = 'text/javascript'
         ctx.response.body = fs.readFileSync(__dirname + sep + 'deps.js', 'utf8')
 
-    } else if (ctx.url === '/highlightjs-10.7.2/default.min.css') {
+    } else if (ctx.url === '/highlightjs-11.5.1/default.min.css') {
         ctx.response.type = 'text/css'
-        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-10.7.2/default.min.css', 'utf8')
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-11.5.1/default.min.css', 'utf8')
 
-    } else if (ctx.url === '/highlightjs-10.7.2/arduino-light.min.css') {
+    } else if (ctx.url === '/highlightjs-11.5.1/arduino-light.min.css') {
         ctx.response.type = 'text/css'
-        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-10.7.2/arduino-light.min.css', 'utf8')
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-11.5.1/arduino-light.min.css', 'utf8')
 
-    } else if (ctx.url === '/highlightjs-10.7.2/highlight.min.js') {
+    } else if (ctx.url === '/highlightjs-11.5.1/highlight.min.js') {
         ctx.response.type = 'text/javascript'
-        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-10.7.2/highlight.min.js', 'utf8')
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-11.5.1/highlight.min.js', 'utf8')
 
-    } else if (ctx.url === '/highlightjs-10.7.2/javascript.min.js') {
+    } else if (ctx.url === '/highlightjs-11.5.1/javascript.min.js') {
         ctx.response.type = 'text/javascript'
-        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-10.7.2/javascript.min.js', 'utf8')
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-11.5.1/javascript.min.js', 'utf8')
 
     } else if (ctx.url === '/tree-view.js') {
         ctx.response.type = 'text/javascript'

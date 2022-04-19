@@ -204,9 +204,9 @@ export default function build ({ source, translateNpmToUrl }) {
 
             </style>
             
-            <link rel="stylesheet" href="/highlightjs-10.7.2/arduino-light.min.css">
-            <script src="/highlightjs-10.7.2/highlight.min.js"></script>
-            <script charset="UTF-8" src="/highlightjs-10.7.2/javascript.min.js"></script>
+            <link rel="stylesheet" href="/highlightjs-11.5.1/arduino-light.min.css">
+            <script src="/highlightjs-11.5.1/highlight.min.js"></script>
+            <script charset="UTF-8" src="/highlightjs-11.5.1/javascript.min.js"></script>
 
         </head>
         <body>
