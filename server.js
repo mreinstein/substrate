@@ -12,34 +12,31 @@ import Koa                  from 'koa'
 import { PassThrough }      from 'stream'
 import { fileURLToPath }    from 'url'
 import { dirname, relative, resolve, sep } from 'path'
-import commandLineArgs      from 'command-line-args';
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-let cmdSettings, initialPath, args;
-
+let args, initialPath = '', port = 5000;
 
 console.log('\n')
 
-// configure port and path from command line arguments
-// useable from cli as 
-//      --directory || -d
-//      --port      || -p
-const cmdOptions = [
-    { name: 'directory', alias: 'd', defaultValue: '', type: String },
-    { name: 'port', alias: 'p', defaultValue: 5000, type: Number }
-];
+const setVars = (val) => {
+    if (!val)
+        return;
+    
+    if (Number(val)) {
+        port = val;
+    } else {
+        initialPath = val;
+    }
+};
 
-// backward compatibility for 
-//  substrate <directory>
-//  root>node server.js <directory>
-if (process.argv.length === 3) {
-    args = process.argv.slice(2);
-} else {
-    cmdSettings = commandLineArgs(cmdOptions);
-}
+// there is no guarantee that the user sent the cmd line args in the correct order
+// we are expecting <directory> <port> but it could be in any order
+// both <directory> and <port> are optional so either could be missing
+args = process.argv.slice(2, process.argv.length);
+setVars(args[0]);
+setVars(args[1]);
 
-initialPath = !cmdSettings ? args.shift() || '' : cmdSettings.directory;
 const servePath = resolve(initialPath);
 
 
@@ -258,7 +255,7 @@ app.use(async (ctx, next) => {
 
 app.use(serve(servePath))
 
-const PORT = cmdSettings?.port || 5000;
+const PORT = port;
  
 app.listen(PORT)
  
