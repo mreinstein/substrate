@@ -14,17 +14,68 @@ import { fileURLToPath }    from 'url'
 import { dirname, relative, resolve, sep } from 'path'
 
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-
 console.log('\n')
 
-// parse the path from the command line argument
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const DEFAULT_PORT = 5000
 const args = process.argv.slice(2)
-const initialPath = args.shift() || ''
-const servePath = resolve(initialPath)
+
+if (args.includes('--help') || args.includes('-h')) {
+    printGeneralUsage()
+    process.exit(0)
+}
+
+
+function printGeneralUsage () {
+    console.log('Run a server that makes explorables viewable in a web browser.')
+    console.log(`\n  ${chalk.whiteBright.bold('substrate')} ${chalk.dim('[options]')}\n`);
+    console.log(chalk.dim('  Options:\n'))
+    console.log(`    ${chalk.underline.bold.whiteBright('path')}              where to search for explorable files (default is current directory)`)
+    console.log(`    --port ${chalk.underline.bold.whiteBright('length')}     port to run on (default is ${DEFAULT_PORT})`)
+    console.log(' ')
+
+    console.log(chalk.dim('\nExamples:\n'))
+
+    console.log('– Host the current path\n')
+    console.log(chalk.cyan('  $ substrate') + '\n')
+
+    console.log('– Host a custom path\n')
+    console.log(chalk.cyan('  $ substrate ~/Sites/explorables') + '\n')
+
+    console.log('– Specify the port\n')
+    console.log(chalk.cyan('  $ substrate --port 5001') + '\n')
+}
+
+
+function readConfigFromCommandLineArgs () {
+    let initialPath = '', port = DEFAULT_PORT
+
+    let inPort = false
+    for (const a of args) {
+        if (inPort) {
+            port = parseInt(a, 10)
+            inPort = false
+        } else {
+            if (a === '--port' || a === '-p')
+                inPort = true
+            else
+                initialPath = a
+        }
+    }
+
+    return { servePath: resolve(initialPath), port }
+}
+
+
+const { servePath, port } = readConfigFromCommandLineArgs()
+
+if (Number.isNaN(port)) {
+    console.error(`${chalk.red('Error!')} Invalid port specified.  Run ${chalk.whiteBright('substrate --help')} for usage instructions.\n`)
+    process.exit(1)
+}
 
 if (!fs.existsSync(servePath)) {
-    console.error(`${chalk.red('Error!')} The input path ${chalk.redBright(servePath)} does not exist.`)
+    console.error(`${chalk.red('Error!')} The input path ${chalk.redBright(servePath)} does not exist.  Run ${chalk.whiteBright('substrate --help')} for usage instructions.`)
     process.exit(1)
 }
 
@@ -237,9 +288,7 @@ app.use(async (ctx, next) => {
 
 
 app.use(serve(servePath))
-
-const PORT = 5000
  
-app.listen(5000)
+app.listen(port)
  
-console.log(`Substrate server listening on port ${PORT}`)
+console.log(`Substrate server listening on port ${port}`)
