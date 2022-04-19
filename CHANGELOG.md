@@ -1,3 +1,8 @@
+# 8.2.0
+* add `--port` and `--help` command line arguments
+* update deps
+
+
 # 8.1.0
 * ignore all node_modules directories when watching
 
