@@ -1,3 +1,8 @@
+# 9.0.0
+* switch ecmaVersion from 2018 to 2020 for optional chaining support and nullish coalescing 
+* update deps
+
+
 # 8.2.0
 * add `--port` and `--help` command line arguments
 * update deps
