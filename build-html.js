@@ -1,3 +1,4 @@
+import { ecmaVersion } from './constants.js'
 import { escape, escodegen, acorn, marked } from '/deps.js'
 
 
@@ -5,7 +6,7 @@ function translateNpmImportsToUrls (source) {
     const npmUrl = 'https://cdn.skypack.dev/'
     const npmModuleRegx = RegExp('(^\/)|(^\.\/)|(^\..\/)|(^http)') /** find imports that do not begin with  "/", "./", or "../"   */
 
-    const program = acorn.parse(source, { ecmaVersion: 9, sourceType: 'module' })
+    const program = acorn.parse(source, { ecmaVersion, sourceType: 'module' })
 
     // find node imports and replace with url for cdn
     // work from the bottom up to avoid positional index math due to changing the length of the string
@@ -90,7 +91,7 @@ export default function build ({ source, translateNpmToUrl }) {
                 return
             
             try {
-                const program = acorn.parse(token.text, { ecmaVersion: 9, sourceType: 'module' })
+                const program = acorn.parse(token.text, { ecmaVersion, sourceType: 'module' })
 
                 if (translateNpmToUrl)
                     token.text = translateNpmImportsToUrls(token.text)
@@ -136,7 +137,7 @@ export default function build ({ source, translateNpmToUrl }) {
                 return `<pre><code class="language-${lang}">${escape(code)}</code></pre>`
      
             try {
-                const program = acorn.parse(code, { ecmaVersion: 9, sourceType: 'module' })
+                const program = acorn.parse(code, { ecmaVersion, sourceType: 'module' })
 
                 const isExplorable = (explorable === 'explorable')
                 let result = ''
