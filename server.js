@@ -191,6 +191,10 @@ app.use(async (ctx, next) => {
         ctx.response.type = 'text/javascript'
         ctx.response.body = fs.readFileSync(__dirname + sep + 'build-html.js', 'utf8')
 
+    } else if (ctx.url === '/constants.js') {
+        ctx.response.type = 'text/javascript'
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'constants.js', 'utf8')
+
     } else if (ctx.url === '/deps.js') {
         ctx.response.type = 'text/javascript'
         ctx.response.body = fs.readFileSync(__dirname + sep + 'deps.js', 'utf8')
