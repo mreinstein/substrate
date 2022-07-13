@@ -203,6 +203,9 @@ export default function build ({ source, translateNpmToUrl }) {
                     font-size: 10pt;
                 }
 
+                img {
+                    max-width: 100%;
+                }
             </style>
             
             <link rel="stylesheet" href="/highlightjs-11.5.1/arduino-light.min.css">
