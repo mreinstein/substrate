@@ -1,3 +1,10 @@
+# 9.2.0
+* constrain rendered image widths in markdown
+* update marked dep
+
+# 9.1.0
+* update substrate-build dep
+
 # 9.0.0
 * switch ecmaVersion from 2018 to 2020 for optional chaining support and nullish coalescing 
 * update deps
