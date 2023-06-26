@@ -40,7 +40,7 @@ function printGeneralUsage () {
     console.log(chalk.cyan('  $ substrate') + '\n')
 
     console.log('– Host a custom path\n')
-    console.log(chalk.cyan('  $ substrate ~/Sites/explorables') + '\n')
+    console.log(chalk.cyan('  $ substrate ~/projects/explorables') + '\n')
 
     console.log('– Specify the port\n')
     console.log(chalk.cyan('  $ substrate --port 5001') + '\n')
@@ -203,9 +203,9 @@ app.use(async (ctx, next) => {
         ctx.response.type = 'text/css'
         ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-11.5.1/default.min.css', 'utf8')
 
-    } else if (ctx.url === '/highlightjs-11.5.1/arduino-light.min.css') {
+    } else if (ctx.url === '/highlightjs-11.5.1/custom.min.css') {
         ctx.response.type = 'text/css'
-        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-11.5.1/arduino-light.min.css', 'utf8')
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-11.5.1/custom.min.css', 'utf8')
 
     } else if (ctx.url === '/highlightjs-11.5.1/highlight.min.js') {
         ctx.response.type = 'text/javascript'
@@ -214,6 +214,10 @@ app.use(async (ctx, next) => {
     } else if (ctx.url === '/highlightjs-11.5.1/javascript.min.js') {
         ctx.response.type = 'text/javascript'
         ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-11.5.1/javascript.min.js', 'utf8')
+
+    } else if (ctx.url === '/highlightjs-11.5.1/json.min.js') {
+        ctx.response.type = 'text/javascript'
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'highlightjs-11.5.1/json.min.js', 'utf8')
 
     } else if (ctx.url === '/tree-view.js') {
         ctx.response.type = 'text/javascript'

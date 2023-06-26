@@ -46,7 +46,7 @@ export default function build ({ source, translateNpmToUrl }) {
         const __vnodes = [ ]
         const __viewFns = [ ]
 
-        function md(...args) {
+        function md (...args) {
             const s = args.shift()
             let result = ''
 
@@ -84,6 +84,10 @@ export default function build ({ source, translateNpmToUrl }) {
 
     const walkTokens = (token) => {
         if (token.type === 'code') {
+
+            if (!token.lang)
+                return
+
             const langParts = token.lang.split(' ')
             const isJavascript = [ 'js', 'javascript' ].indexOf(langParts[0].trim().toLowerCase()) >= 0
 
@@ -130,6 +134,9 @@ export default function build ({ source, translateNpmToUrl }) {
 
     const renderer = {
         code (code, infostring, escaped) {
+            if (!infostring)
+                return `<pre><code class="">${escape(code)}</code></pre>`
+
             const [ lang, explorable ] = infostring.split(' ')
             const isJavascript = [ 'js', 'javascript' ].indexOf(lang.trim().toLowerCase()) >= 0
 
@@ -182,12 +189,16 @@ export default function build ({ source, translateNpmToUrl }) {
                 
                 body {
                     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+                    max-inline-size: 75ch;
+                    margin-inline: auto;
+                    margin-block: 0px;
+                    line-height: 1.5;
                 }
 
                 .javascript-formatted {
                     border: 1px solid ${errorColor};
                     background-color: ${bgColor};
-                    margin-bottom: 10px;
+                    margin-block-end: 10px;
                     padding: 8px;
                 }
 
@@ -196,21 +207,28 @@ export default function build ({ source, translateNpmToUrl }) {
                 }
 
                 code, code * {
-                    font-family: Consolas, Monaco, monospace;
+                    font-family: Menlo, Monaco, 'Courier New', monospace;
                 }
 
                 pre code {
-                    font-size: 10pt;
+                    font-size: 12px;
                 }
 
                 img {
-                    max-width: 100%;
+                    max-inline-size: 100%;
+                }
+
+                a {
+                    text-decoration: underline 2px;
+                    text-underline-position: under;
+                    word-break: break-all;
                 }
             </style>
             
-            <link rel="stylesheet" href="/highlightjs-11.5.1/arduino-light.min.css">
+            <link rel="stylesheet" href="/highlightjs-11.5.1/custom.min.css">
             <script src="/highlightjs-11.5.1/highlight.min.js"></script>
             <script charset="UTF-8" src="/highlightjs-11.5.1/javascript.min.js"></script>
+            <script charset="UTF-8" src="/highlightjs-11.5.1/json.min.js"></script>
 
         </head>
         <body>
