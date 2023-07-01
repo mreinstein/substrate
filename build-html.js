@@ -41,6 +41,7 @@ export default function build ({ source, translateNpmToUrl }) {
     
     let scriptContent = `
         import { html as __html, marked as __marked } from '/deps.js'
+        import '/substrate-draggable.js'
        
 
         const __vnodes = [ ]
@@ -152,7 +153,7 @@ export default function build ({ source, translateNpmToUrl }) {
                 // if the code ends with a snabby html element, prepend the div where that view will render
                 if (isExplorable && endsWithSnabbyBlock(program)) {
                     explorableViewIdx++
-                    result = `<div id="explorable-view-${explorableViewIdx}"></div>` 
+                    result = `<div id="explorable-view-${explorableViewIdx}"></div>`
                 }
 
                 if (isExplorable)
@@ -174,6 +175,18 @@ export default function build ({ source, translateNpmToUrl }) {
 
     const html = marked(source)
 
+    // split the html by explorable sections, and wrap each of them in full width div
+    let wrappedHtml = ''
+
+    html.split(/<div id="explorable-view-([\d])"><\/div>/).forEach(function (m, idx) {
+        if (idx % 2 === 0) {
+            wrappedHtml += `<div class="not-explorable-wrapper">${m}</div>`
+        } else {
+            wrappedHtml += `<div id="explorable-view-${Math.floor(idx/2) + 1}"></div>`
+        }
+    })
+
+
     scriptContent += `\nupdate()\n`
 
     const errorColor = '#f31b64'
@@ -189,8 +202,6 @@ export default function build ({ source, translateNpmToUrl }) {
                 
                 body {
                     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-                    max-inline-size: 75ch;
-                    margin-inline: auto;
                     margin-block: 0px;
                     line-height: 1.5;
                 }
@@ -223,6 +234,12 @@ export default function build ({ source, translateNpmToUrl }) {
                     text-underline-position: under;
                     word-break: break-all;
                 }
+
+                .not-explorable-wrapper {
+                    max-inline-size: 75ch;
+                    margin-inline: auto;
+                }
+
             </style>
             
             <link rel="stylesheet" href="/highlightjs-11.5.1/custom.min.css">
@@ -232,7 +249,7 @@ export default function build ({ source, translateNpmToUrl }) {
 
         </head>
         <body>
-        ${html}
+        ${wrappedHtml}
         <script type="module">
             hljs.highlightAll()
             ${scriptContent}

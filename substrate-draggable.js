@@ -1,7 +1,4 @@
-// TODO: build a custom element for a draggable element
-// TODO: implement expandable section
-// ⯆
-
+// TODO: implement expandable source section
 
 const template = document.createElement('template');
 
@@ -20,8 +17,6 @@ template.innerHTML = `
             position: relative;
             inset-inline-start: 0px;
             inset-block-start: 0px;
-            block-size: 200px;
-            inline-size: 300px;
             background-color: white;
             display: grid;
             grid-template-columns: 20px 1fr 20px;
@@ -49,6 +44,7 @@ template.innerHTML = `
             background-color: white;
             min-block-size: 20px;
             padding: 6px;
+            box-sizing: border-box;
         }
 
         .controls {
@@ -111,11 +107,10 @@ class Draggable extends HTMLElement {
 
     // invoked each time the custom element is appended into a document-connected element
     connectedCallback () {
-        
+
         const handleResizerDrag = function (event) {
-            console.log('clicky :)')
-            
-            const preview = event.target.shadowRoot?.querySelector('.explorable-inner');
+
+            const preview = event.composedPath().find((p) => p.classList?.contains('explorable-inner'))
                
             // I don't know why, but closest() doesn't work in this custom element, so using querySelector instead
             //const resizer = event.target.shadowRoot.closest('.draggable');
@@ -176,4 +171,4 @@ class Draggable extends HTMLElement {
 }
 
 
-window.customElements.define('ui-draggable', Draggable);
+window.customElements.define('substrate-draggable', Draggable);

@@ -187,7 +187,12 @@ app.use(async (ctx, next) => {
         ctx.response.type = 'text/html'
         ctx.response.body = fs.readFileSync(__dirname + sep + 'list.html', 'utf8')
 
-    } else if (ctx.url === '/build-html.js') {
+    } else if (ctx.url === '/substrate-draggable.js') {
+        ctx.response.type = 'text/javascript'
+        ctx.response.body = fs.readFileSync(__dirname + sep + 'substrate-draggable.js', 'utf8')
+
+    }
+    else if (ctx.url === '/build-html.js') {
         ctx.response.type = 'text/javascript'
         ctx.response.body = fs.readFileSync(__dirname + sep + 'build-html.js', 'utf8')
 
