@@ -1,3 +1,7 @@
+# 9.3.0
+* improve readability by limiting max line width, other ergonomic improvements
+* initial work on a built-in draggable element, `<substrate-draggable>`
+
 # 9.2.0
 * constrain rendered image widths in markdown
 * update marked dep
