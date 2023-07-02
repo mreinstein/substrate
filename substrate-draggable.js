@@ -1,4 +1,7 @@
+// inspired by the draggable styles as shown on https://shoelace.style/components/popup?id=examples
+
 // TODO: implement expandable source section
+
 
 const template = document.createElement('template');
 
@@ -6,7 +9,7 @@ const template = document.createElement('template');
 template.innerHTML = `
     <style>
         .explorable-container {
-            width: 100%;
+            inline-size: 100%;
             background-color: hsl(0 0% 97%);
             display: flex;
             align-items: center;
@@ -19,7 +22,8 @@ template.innerHTML = `
             inset-block-start: 0px;
             background-color: white;
             display: grid;
-            grid-template-columns: 20px 1fr 20px;
+            grid-template-columns: 20px 1fr 28px;
+            grid-gap: 0px;
             border: solid 1px hsl(240 5.9% 90%);
 
             max-inline-size: 100%;
@@ -28,40 +32,46 @@ template.innerHTML = `
 
         .explorable-container, .explorable-inner {
             border-radius: 3px;
+            box-sizing: border-box;
+            margin: 0px;
+            padding: 0px;
         }
 
         .draggable {
             background-color: white;
-            height: 100%;
+            block-size: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: ew-resize;
             user-select: none;
+            box-sizing: border-box;
         }
 
         .content {
             background-color: white;
-            min-block-size: 20px;
-            padding: 6px;
+            padding: 0px;
             box-sizing: border-box;
         }
 
         .controls {
             border-top-left-radius: 3px;
             border-right: var(--draggable-border);
+            border:none;
             display: flex;
             align-items: flex-end;
+            box-sizing: border-box;
         }
 
         .controls > button {
             border: none;
             background: transparent;
-            width: 18px;
+            inline-size: 18px;
             cursor: pointer;
             margin: 0;
             padding: 0;
-            height: 18px;
+            block-size: 18px;
+            box-sizing: border-box;
         }
     </style>
 
@@ -69,11 +79,12 @@ template.innerHTML = `
         <div class="explorable-inner">
             
             <div class="controls" style="border-top-left-radius: 3px; border-right: var(--draggable-border);">
-                <button> ⯈ </button>
+                <!-- <button> ▶ </button>  -->
             </div>
 
             <div class="content">
                 <slot> </slot>
+                <slot name="src" style="display:none;"> </slot>
             </div>
 
             <div class="draggable" style="border-top-right-radius: 3px; border-left: var(--draggable-border);">
@@ -93,6 +104,7 @@ class Draggable extends HTMLElement {
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
         this._model = {
+            srcOpen: false,
             handlers: { }
         };
     }
@@ -123,6 +135,14 @@ class Draggable extends HTMLElement {
 
             if (!resizer)
                 return
+
+            const resizeObserver = new ResizeObserver(function (entries) {
+                for (const entry of entries)
+                    preview.dispatchEvent(new CustomEvent('resize', { bubbles: true, composed: true, detail: { width: entry.contentBoxSize[0].inlineSize } }));
+            })
+
+            resizeObserver.observe(preview.querySelector('.content'))
+
             
             const parentHalfWidth = preview.parentNode.offsetWidth / 2;
 
@@ -137,7 +157,13 @@ class Draggable extends HTMLElement {
             function dragMove (event) {
                 const newX = event.changedTouches ? event.changedTouches[0].pageX : event.pageX;
                 const width = (newX - parentHalfWidth) * 2;
-                preview.style.width = `${width}px`;
+
+                if (preview.style.inlineSize === `${width}px`)
+                    return;
+
+                preview.style.inlineSize = `${width}px`;
+
+                preview.dispatchEvent(new CustomEvent('resize', { bubbles: true, composed: true, detail: { width } }));
             }
 
             function dragStop () {

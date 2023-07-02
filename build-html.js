@@ -153,7 +153,7 @@ export default function build ({ source, translateNpmToUrl }) {
                 // if the code ends with a snabby html element, prepend the div where that view will render
                 if (isExplorable && endsWithSnabbyBlock(program)) {
                     explorableViewIdx++
-                    result = `<div id="explorable-view-${explorableViewIdx}"></div>`
+                    result = `<div id="explorable-view-${explorableViewIdx}" class="explorable-view"></div>`
                 }
 
                 if (isExplorable)
@@ -178,11 +178,11 @@ export default function build ({ source, translateNpmToUrl }) {
     // split the html by explorable sections, and wrap each of them in full width div
     let wrappedHtml = ''
 
-    html.split(/<div id="explorable-view-([\d])"><\/div>/).forEach(function (m, idx) {
+    html.split(/<div id="explorable-view-([\d])" class="explorable-view"><\/div>/).forEach(function (m, idx) {
         if (idx % 2 === 0) {
             wrappedHtml += `<div class="not-explorable-wrapper">${m}</div>`
         } else {
-            wrappedHtml += `<div id="explorable-view-${Math.floor(idx/2) + 1}"></div>`
+            wrappedHtml += `<div id="explorable-view-${Math.floor(idx/2) + 1}" class="explorable-view"></div>`
         }
     })
 
@@ -238,6 +238,13 @@ export default function build ({ source, translateNpmToUrl }) {
                 .not-explorable-wrapper {
                     max-inline-size: 75ch;
                     margin-inline: auto;
+                }
+
+                .explorable-view {
+                    background-color: hsl(0 0% 97%);
+                    border-radius: 3px;
+                    display: flex;
+                    justify-content: center;
                 }
 
             </style>
