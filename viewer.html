@@ -226,6 +226,7 @@ async function main () {
             model.lastModified = lastModified
 
             const htmlOutput = await buildSource(model.sourceUrl)
+
             iframe.srcdoc = htmlOutput
 
             iframe.onload = function () {
