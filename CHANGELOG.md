@@ -1,3 +1,6 @@
+# 9.4.0
+* update ecma version from 2020 -> 2022
+
 # 9.3.0
 * improve readability by limiting max line width, other ergonomic improvements
 * initial work on a built-in draggable element, `<substrate-draggable>`
