@@ -1,1 +1,1 @@
-export const ecmaVersion = 2020
+export const ecmaVersion = 2022
