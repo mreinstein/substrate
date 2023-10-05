@@ -1,3 +1,6 @@
+# 9.4.1
+* fix #27
+
 # 9.4.0
 * update ecma version from 2020 -> 2022
 
