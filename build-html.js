@@ -178,7 +178,7 @@ export default function build ({ source, translateNpmToUrl }) {
     // split the html by explorable sections, and wrap each of them in full width div
     let wrappedHtml = ''
 
-    html.split(/<div id="explorable-view-([\d])" class="explorable-view"><\/div>/).forEach(function (m, idx) {
+    html.split(/<div id="explorable-view-([\d]+)" class="explorable-view"><\/div>/).forEach(function (m, idx) {
         if (idx % 2 === 0) {
             wrappedHtml += `<div class="not-explorable-wrapper">${m}</div>`
         } else {
