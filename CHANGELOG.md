@@ -1,3 +1,9 @@
+# 9.5.1
+* update deps
+
+# 9.5.0
+* update deps
+
 # 9.4.1
 * fix #27
 
