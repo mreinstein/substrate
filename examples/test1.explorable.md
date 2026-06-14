@@ -52,16 +52,16 @@ html`
 Javascript will hoist import statements, so they actually don't need to be at the top of the document.
 We can put imports at the end if we like, much like references in a more traditional document.
 
-We can also import stuff directly from npm without needing to `npm install`! skypack is amazing!
+We can also import stuff directly from npm without needing to `npm install`! esm is amazing!
 
 ```javascript
-import constraintSolver from 'https://cdn.skypack.dev/constraint-solver'
+import constraintSolver from 'https://esm.sh/constraint-solver'
 ```
 
 You can import other explorables too
 ```javascript
 import randomInt from './test2.explorable.md'
-import html     from 'https://cdn.skypack.dev/snabby'
+import html     from 'https://esm.sh/snabby'
 ```
 
 

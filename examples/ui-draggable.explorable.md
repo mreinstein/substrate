@@ -53,7 +53,7 @@ function view (model, content, update) {
 ```javascript
 export default { init, view }
 
-import clamp    from 'https://cdn.jsdelivr.net/gh/mreinstein/math-gap/src/clamp.js'
-import html     from 'https://cdn.skypack.dev/snabby'
-import throttle from 'https://cdn.skypack.dev/lodash.throttle'
+import { clamp } from 'https://esm.sh/@footgun/math-gap'
+import html     from 'https://esm.sh/snabby'
+import throttle from 'https://esm.sh/lodash.throttle'
 ```
